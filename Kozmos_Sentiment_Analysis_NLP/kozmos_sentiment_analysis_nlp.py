@@ -38,5 +38,10 @@ tf = df["Review"].apply(lambda x: pd.Series(x.split(" ")).value_counts()).sum(ax
 tf.columns = ['Words', 'tf']
 print(tf)
 
-tf[tf["tf"]>200].plot.bar(x="Words", y="tf")
+# Bar plot
+ax = tf[tf["tf"]>200].plot.bar(x="Words", y="tf")
+ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
+
+plt.tight_layout()
+plt.savefig("Generated_photos/term_frequency.png")
 plt.show()
