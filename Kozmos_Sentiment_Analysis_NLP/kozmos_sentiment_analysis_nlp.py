@@ -6,11 +6,14 @@ import matplotlib.pyplot as plt
 #from textblob    import Word, TextBlob
 import nltk
 from internal_functions.textCleaner import textCleaner
+from warnings import filterwarnings
+filterwarnings("ignore")
+
 #import testtesttest
 #nltk.download('stopwords')
 #nltk.download('wordnet')
 
-# Text Preprocessing
+#### Text Preprocessing
 amazon_kozmos_data = pd.read_excel("Dataset/amazon.xlsx")
 df = amazon_kozmos_data.copy()
 #df.head()
@@ -27,3 +30,13 @@ print(df["Review"][321])
 #rarewords_df = pd.Series(' '.join(df["Review"]).split()).value_counts()
 #drops = rarewords_df[rarewords_df<=2]
 #drops
+
+
+#### Text Visualization
+# Term Frequency
+tf = df["Review"].apply(lambda x: pd.Series(x.split(" ")).value_counts()).sum(axis=0).reset_index()
+tf.columns = ['Words', 'tf']
+print(tf)
+
+tf[tf["tf"]>200].plot.bar(x="Words", y="tf")
+plt.show()
