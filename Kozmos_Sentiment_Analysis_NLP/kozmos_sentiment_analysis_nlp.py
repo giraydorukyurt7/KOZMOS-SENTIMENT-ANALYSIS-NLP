@@ -23,7 +23,7 @@ df = df.dropna(subset="Review")
 #df["Review"][1]
 
 df["Review"] = textCleaner(df["Review"])
-df["Review"][321]
+print(df["Review"][321])
 #rarewords_df = pd.Series(' '.join(df["Review"]).split()).value_counts()
 #drops = rarewords_df[rarewords_df<=2]
 #drops

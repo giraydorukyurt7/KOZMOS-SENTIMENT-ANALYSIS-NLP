@@ -17,7 +17,7 @@ def textCleaner(df_text):
     # Remove Numbers
     df_text = df_text.str.replace(r'\d+', " ", regex=True)
     # Remove Stopwords
-    nltk.download('stopwords')
+    #nltk.download('stopwords')
     sw = stopwords.words('english')
     df_text = df_text.apply(lambda x: " ".join(x for x in str(x).split() if x not in sw))
     # Remove Rarewords
@@ -25,7 +25,7 @@ def textCleaner(df_text):
     drops = rarewords_df[rarewords_df<=2]
     df_text = df_text.apply(lambda x: " ".join(x for x in str(x).split() if x not in drops))
     # Lemmatization
-    nltk.download('wordnet')
+    #nltk.download('wordnet')
     df_text = df_text.apply(lambda x: " ".join([Word(word).lemmatize() for word in x.split()]))
     # Remove Extra Spaces
     df_text = df_text.str.replace(r'\s+', ' ', regex=True)
