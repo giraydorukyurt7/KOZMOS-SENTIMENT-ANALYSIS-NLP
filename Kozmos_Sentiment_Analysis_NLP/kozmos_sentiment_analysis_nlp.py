@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #from nltk.corpus import stopwords
 #from textblob    import Word, TextBlob
 import nltk
-from textCleaner import textCleaner
+from internal_functions.textCleaner import textCleaner
 #import testtesttest
 #nltk.download('stopwords')
 #nltk.download('wordnet')
