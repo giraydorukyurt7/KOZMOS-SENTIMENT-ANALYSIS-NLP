@@ -12,7 +12,7 @@ from PIL                                import Image
 from nltk.sentiment                     import SentimentIntensityAnalyzer
 from sklearn.preprocessing              import LabelEncoder
 from sklearn.feature_extraction.text    import TfidfVectorizer
-from sklearn.model_selection            import train_test_split, GridSearchCV, cross_validate
+from sklearn.model_selection            import train_test_split, GridSearchCV, cross_val_score
 from sklearn.linear_model               import LogisticRegression
 from sklearn.ensemble                   import RandomForestClassifier
 
@@ -122,11 +122,11 @@ print("size of X_train  : "   + str(X_train.size),
 log_model = LogisticRegression(random_state=20)
 
 log_params_l1 = {"penalty": ["l1"],
-                 "solver": ["liblinear"],  # solver for L1
+                 "solver": ["liblinear", "saga"],  # solvers for L1
                  "max_iter": [200, 500, 1000, 2000]
 }
 log_params_l2 = {"penalty": ["l2"],
-                 "solver": ["liblinear", "lbfgs", "newton-cg", "sag"],  # solvers for L2
+                 "solver": ["liblinear", "lbfgs", "newton-cg","newton-cholesky", "sag", "saga"],  # solvers for L2
                  "max_iter": [200, 500, 1000, 2000]
 }
 log_params_elasticnet = {"penalty": ["elasticnet"],
@@ -138,16 +138,40 @@ log_params_elasticnet = {"penalty": ["elasticnet"],
 
 log_best_grid_l1 = GridSearchCV(log_model,
                                 log_params_l1,
-                                cv=5,
+                                cv=10,
                                 n_jobs=-1,
                                 verbose=True).fit(X_tf_idf_word, y)
 log_best_grid_l2 = GridSearchCV(log_model,
                                 log_params_l2,
-                                cv=5,
+                                cv=10,
                                 n_jobs=-1,
                                 verbose=True).fit(X_tf_idf_word, y)
 log_best_grid_elasticnet = GridSearchCV(log_model,
                                         log_params_elasticnet,
-                                        cv=5,
+                                        cv=10,
                                         n_jobs=-1,
                                         verbose=True).fit(X_tf_idf_word, y)
+
+print("l1 score        : %f" % log_best_grid_l1.best_score_)
+print(log_best_grid_l1.best_params_)
+print("l2 score        : %f" % log_best_grid_l2.best_score_)
+print(log_best_grid_l2.best_params_)
+print("ElasticNet score: %f" % log_best_grid_elasticnet.best_score_)
+print(log_best_grid_elasticnet.best_params_)
+
+###########################Obtained Data###########################
+####l1 score        : 0.953695
+####{'max_iter': 200, 'penalty': 'l1', 'solver': 'saga'}
+####l2 score        : 0.911855
+####{'max_iter': 200, 'penalty': 'l2', 'solver': 'saga'}
+####ElasticNet score: 0.938495
+####{'l1_ratio': 0.75, 'max_iter': 200, 'penalty': 'elasticnet', 'solver': 'saga'}
+
+log_final = log_model.set_params(**log_best_grid_l1.best_params_,
+                                 random_state=20).fit(X_train,y)
+cross_val_score_log_model = cross_val_score(log_final,
+                                            X_test,
+                                            y,
+                                            cv=10,
+                                            n_jobs=-1).mean()
+print("Cross validation score for Logistic Regression %f" %cross_val_score_log_model)
