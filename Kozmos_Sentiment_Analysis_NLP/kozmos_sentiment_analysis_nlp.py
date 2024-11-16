@@ -11,6 +11,8 @@ from wordcloud import WordCloud
 from PIL import Image
 from nltk.sentiment import SentimentIntensityAnalyzer
 from sklearn.preprocessing import LabelEncoder
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
 filterwarnings("ignore")
 
 #Download packages
@@ -90,5 +92,23 @@ df_analyzed = pd.concat([df["sentiment_label"].value_counts(),
                          df.groupby("sentiment_label")["Star"].mean(), 
                          df.groupby("sentiment_label")["HelpFul"].sum()],
                         axis=1)
+print(df_analyzed)
+#df_analyzed.to_csv("Generated_files/df_analyzed.csv") # Save df_analyzed
 
-df_analyzed.to_csv("Generated_files/df_analyzed.csv")
+# turn pos/neg to 1-0 for machine learning
+df["sentiment_label"] = LabelEncoder().fit_transform(df["sentiment_label"])
+# create dependent variable & independent variable
+y = df["sentiment_label"]
+X = df["Review"]
+# Word vectorizing with TF-IDF Vectors
+tf_idf_word_vectorizer = TfidfVectorizer()
+X_tf_idf_word = tf_idf_word_vectorizer.fit_transform(X)
+# Train-Test split
+X_train, X_test, Y_train, Y_test = train_test_split(X_tf_idf_word,
+                                                    y,
+                                                    test_size=0.30,
+                                                    random_state=20)
+print("size of X_train  : "   + str(X_train.size),
+      "\nsize of X_test   : " + str(X_test.size), 
+      "\nsize of Y_train  : " + str(Y_train.size), 
+      "\nsize of Y_test   : " + str(Y_test.size))
