@@ -10,6 +10,7 @@ from warnings import filterwarnings
 from wordcloud import WordCloud
 from PIL import Image
 from nltk.sentiment import SentimentIntensityAnalyzer
+from sklearn.preprocessing import LabelEncoder
 filterwarnings("ignore")
 
 #Download packages
@@ -72,3 +73,22 @@ print(df["Review"].head())
 sia = SentimentIntensityAnalyzer()
 df["polarity_score"] = df["Review"].apply(lambda x: sia.polarity_scores(x)["compound"])
 print(df[["Review","polarity_score"]])
+
+#### Feature Engineering
+df["sentiment_label"] = df["Review"].apply(lambda x: "pos" if sia.polarity_scores(x)["compound"] > 0 else "neg")
+# How many negative/positive comments
+print("Quantities:")
+print(df["sentiment_label"].value_counts())
+# The overall rating for comment polarity.
+print("Average Overall Ratings:")
+print(df.groupby("sentiment_label")["Star"].mean())
+# The helpfulness votes for comment polarity.
+print("Number of Helpfulness Votes:")
+print(df.groupby("sentiment_label")["HelpFul"].sum())
+
+df_analyzed = pd.concat([df["sentiment_label"].value_counts(), 
+                         df.groupby("sentiment_label")["Star"].mean(), 
+                         df.groupby("sentiment_label")["HelpFul"].sum()],
+                        axis=1)
+
+df_analyzed.to_csv("Generated_files/df_analyzed.csv")
