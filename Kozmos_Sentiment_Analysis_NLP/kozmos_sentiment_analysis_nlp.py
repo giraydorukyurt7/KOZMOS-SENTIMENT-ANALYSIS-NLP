@@ -45,7 +45,7 @@ ax = tf[tf["tf"]>200].plot.bar(x="Words", y="tf")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
 
 plt.tight_layout()
-#plt.savefig("Generated_photos/term_frequency.png")
+#plt.savefig("Generated_photos/term_frequency.png") #save the bar plot
 plt.show()
 # Word Cloud
 text = " ".join(i for i in df.Review) # transform Review column into single string
@@ -56,11 +56,10 @@ wordcloud = WordCloud(background_color= "lightgray",
                       contour_width=3,
                       contour_color="firebrick",
                       colormap="gist_rainbow",
-                      width=23090,
-                      height=7590).generate(text)
-
+                      width=8000,
+                      height=4000).generate(text)
+plt.figure(figsize=(20, 10))
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
-#wordcloud.to_file("Generated_photos/wordcloud.png") # save the word cloud
+#plt.savefig("Generated_photos/wordcloud_high_res.png", dpi=600, bbox_inches='tight') #save wordcloud
 plt.show()
-#plt.imshow("Dataset/amazon.jpg")
