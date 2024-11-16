@@ -5,14 +5,17 @@ import matplotlib.pyplot as plt
 #from nltk.corpus import stopwords
 #from textblob    import Word, TextBlob
 import nltk
-from internal_functions.textCleaner import textCleaner
-from warnings import filterwarnings
-from wordcloud import WordCloud
-from PIL import Image
-from nltk.sentiment import SentimentIntensityAnalyzer
-from sklearn.preprocessing import LabelEncoder
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
+from internal_functions.textCleaner     import textCleaner
+from warnings                           import filterwarnings
+from wordcloud                          import WordCloud
+from PIL                                import Image
+from nltk.sentiment                     import SentimentIntensityAnalyzer
+from sklearn.preprocessing              import LabelEncoder
+from sklearn.feature_extraction.text    import TfidfVectorizer
+from sklearn.model_selection            import train_test_split, GridSearchCV, cross_validate
+from sklearn.linear_model               import LogisticRegression
+from sklearn.ensemble                   import RandomForestClassifier
+
 filterwarnings("ignore")
 
 #Download packages
@@ -112,3 +115,39 @@ print("size of X_train  : "   + str(X_train.size),
       "\nsize of X_test   : " + str(X_test.size), 
       "\nsize of Y_train  : " + str(Y_train.size), 
       "\nsize of Y_test   : " + str(Y_test.size))
+
+#### Sentiment Modeling
+### Logistic Regressing Model
+
+log_model = LogisticRegression(random_state=20)
+
+log_params_l1 = {"penalty": ["l1"],
+                 "solver": ["liblinear"],  # solver for L1
+                 "max_iter": [200, 500, 1000, 2000]
+}
+log_params_l2 = {"penalty": ["l2"],
+                 "solver": ["liblinear", "lbfgs", "newton-cg", "sag"],  # solvers for L2
+                 "max_iter": [200, 500, 1000, 2000]
+}
+log_params_elasticnet = {"penalty": ["elasticnet"],
+                         "solver": ["saga"],             # Solver for ElasticNet
+                         "l1_ratio": [0.25, 0.5, 0.75],  # effects of l1 and l2
+                         "max_iter": [200, 500, 1000, 2000]
+}
+
+
+log_best_grid_l1 = GridSearchCV(log_model,
+                                log_params_l1,
+                                cv=5,
+                                n_jobs=-1,
+                                verbose=True).fit(X_tf_idf_word, y)
+log_best_grid_l2 = GridSearchCV(log_model,
+                                log_params_l2,
+                                cv=5,
+                                n_jobs=-1,
+                                verbose=True).fit(X_tf_idf_word, y)
+log_best_grid_elasticnet = GridSearchCV(log_model,
+                                        log_params_elasticnet,
+                                        cv=5,
+                                        n_jobs=-1,
+                                        verbose=True).fit(X_tf_idf_word, y)
