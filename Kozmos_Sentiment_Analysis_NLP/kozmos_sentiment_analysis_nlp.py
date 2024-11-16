@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import nltk
 from internal_functions.textCleaner import textCleaner
 from warnings import filterwarnings
+from wordcloud import WordCloud
+from PIL import Image
 filterwarnings("ignore")
 
 #import testtesttest
@@ -43,5 +45,22 @@ ax = tf[tf["tf"]>200].plot.bar(x="Words", y="tf")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
 
 plt.tight_layout()
-plt.savefig("Generated_photos/term_frequency.png")
+#plt.savefig("Generated_photos/term_frequency.png")
 plt.show()
+# Word Cloud
+text = " ".join(i for i in df.Review) # transform Review column into single string
+amazon_mask = np.array(Image.open("Dataset/amazon.png"))
+wordcloud = WordCloud(background_color= "lightgray",
+                      mask=amazon_mask,
+                      max_words=1000,
+                      contour_width=3,
+                      contour_color="firebrick",
+                      colormap="gist_rainbow",
+                      width=23090,
+                      height=7590).generate(text)
+
+plt.imshow(wordcloud, interpolation="bilinear")
+plt.axis("off")
+#wordcloud.to_file("Generated_photos/wordcloud.png") # save the word cloud
+plt.show()
+#plt.imshow("Dataset/amazon.jpg")
