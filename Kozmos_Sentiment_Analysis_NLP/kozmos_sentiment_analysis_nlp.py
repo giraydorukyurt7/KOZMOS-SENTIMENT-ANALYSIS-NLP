@@ -9,11 +9,13 @@ from internal_functions.textCleaner import textCleaner
 from warnings import filterwarnings
 from wordcloud import WordCloud
 from PIL import Image
+from nltk.sentiment import SentimentIntensityAnalyzer
 filterwarnings("ignore")
 
-#import testtesttest
-#nltk.download('stopwords')
-#nltk.download('wordnet')
+#Download packages
+#nltk.download('stopwords')    # --> Text Preprocessing
+#nltk.download('wordnet')      # --> Text Preprocessing
+#nltk.download('vader_lexicon') # --> Sentiment Analysis
 
 #### Text Preprocessing
 amazon_kozmos_data = pd.read_excel("Dataset/amazon.xlsx")
@@ -61,5 +63,12 @@ wordcloud = WordCloud(background_color= "lightgray",
 plt.figure(figsize=(20, 10))
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
-#plt.savefig("Generated_photos/wordcloud_high_res.png", dpi=600, bbox_inches='tight') #save wordcloud
+#plt.savefig("Generated_photos/wordcloud__.png", dpi=600, bbox_inches='tight') #save wordcloud
 plt.show()
+
+
+#### Sentiment Analysis
+print(df["Review"].head())
+sia = SentimentIntensityAnalyzer()
+df["polarity_score"] = df["Review"].apply(lambda x: sia.polarity_scores(x)["compound"])
+print(df[["Review","polarity_score"]])
