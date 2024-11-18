@@ -15,6 +15,7 @@ from sklearn.feature_extraction.text    import TfidfVectorizer
 from sklearn.model_selection            import train_test_split, GridSearchCV, cross_val_score
 from sklearn.linear_model               import LogisticRegression
 from sklearn.ensemble                   import RandomForestClassifier
+from sklearn.metrics                    import accuracy_score, classification_report
 
 filterwarnings("ignore")
 
@@ -168,10 +169,42 @@ print(log_best_grid_elasticnet.best_params_)
 ####{'l1_ratio': 0.75, 'max_iter': 200, 'penalty': 'elasticnet', 'solver': 'saga'}
 
 log_final = log_model.set_params(**log_best_grid_l1.best_params_,
-                                 random_state=20).fit(X_train,y)
+                                 random_state=20).fit(X_train,Y_train)
+
+# Error and Accuracy Metrics
+
 cross_val_score_log_model = cross_val_score(log_final,
                                             X_test,
-                                            y,
+                                            Y_test,
                                             cv=10,
                                             n_jobs=-1).mean()
-print("Cross validation score for Logistic Regression %f" %cross_val_score_log_model)
+y_pred = log_final.predict(X_test)
+accuracy_score_log_model = accuracy_score(Y_test, y_pred)
+classification_report_log_model = classification_report(Y_test, y_pred)
+print("Cross validation score (Mean Cross-Validation Accuracy) for Logistic Regression %f" % cross_val_score_log_model)
+print("Accuracy score (Test Set Accuracy) for Logistic Regression %f" % accuracy_score_log_model)
+print("Classification Report for Logistic Regression: ")  
+print(classification_report_log_model)
+
+
+#### Testing the model
+#examples
+def sentence_to_df(sentence):
+      print("Normal Sentence")
+      print(sentence)
+      sentence = pd.DataFrame(sentence)
+      sentence.columns = ['sentence']
+      print("df sentence")      
+      print(sentence)
+      sentence['sentence'] = textCleaner(sentence['sentence'])
+      print("Cleaned Sentence")
+      print(sentence)
+      return sentence
+sentence1 = "The movie was great."
+sentence2 = "This is the worst holiday trip I have ever been."
+sentence3 = "I really liked this product's features."
+
+sentences = [sentence1, sentence2, sentence3]
+
+for sentence in sentences:
+      sentence_to_df(sentence)
