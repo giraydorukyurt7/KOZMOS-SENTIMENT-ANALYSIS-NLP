@@ -189,17 +189,31 @@ print(classification_report_log_model)
 
 #### Testing the model
 #examples
-def sentence_to_df(sentence):
-      print("Normal Sentence")
-      print(sentence)
-      sentence = pd.DataFrame(sentence)
-      sentence.columns = ['sentence']
-      print("df sentence")      
-      print(sentence)
-      sentence['sentence'] = textCleaner(sentence['sentence'])
-      print("Cleaned Sentence")
-      print(sentence)
-      return sentence
+# sentence_to_df function
+def sentence_to_df(sentence, vectorizer_method):
+    print("===========================================================")
+    print("---Normal Sentence---")
+    print(sentence)
+    
+    # Create DF
+    df_sentence = pd.DataFrame([sentence], columns=['sentence'])
+    print("---df sentence---")      
+    print(df_sentence)
+    
+    # Clean sentence
+    df_sentence['sentence'] = textCleaner(df_sentence['sentence'], rare_words=False)
+    print("---Cleaned Sentence---")
+    print(df_sentence['sentence'].iloc[0])
+    # tf-idf
+    new_sentence_tf_idf = vectorizer_method.transform(df_sentence['sentence'])
+    print(new_sentence_tf_idf)
+    return new_sentence_tf_idf
+
+# Test sentence
+sentence1 = "The curtains look great and set a dramatic tone to the room. They are thin enough to allow in sunlight so the room isnt completely dark. curtain look great set dramatic room thin enough allow sunlight room completely dark"
+a = sentence_to_df(sentence1, tf_idf_word_vectorizer)
+
+
 sentence1 = "The movie was great."
 sentence2 = "This is the worst holiday trip I have ever been."
 sentence3 = "I really liked this product's features."
@@ -207,4 +221,4 @@ sentence3 = "I really liked this product's features."
 sentences = [sentence1, sentence2, sentence3]
 
 for sentence in sentences:
-      sentence_to_df(sentence)
+      sentence_to_df(sentence, tf_idf_word_vectorizer)
