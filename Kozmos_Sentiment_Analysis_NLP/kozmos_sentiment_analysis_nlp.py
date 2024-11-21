@@ -180,45 +180,58 @@ cross_val_score_log_model = cross_val_score(log_final,
                                             n_jobs=-1).mean()
 y_pred = log_final.predict(X_test)
 accuracy_score_log_model = accuracy_score(Y_test, y_pred)
-classification_report_log_model = classification_report(Y_test, y_pred)
+classification_report_log_model = classification_report(Y_test, y_pred, output_dict=True)
 print("Cross validation score (Mean Cross-Validation Accuracy) for Logistic Regression %f" % cross_val_score_log_model)
 print("Accuracy score (Test Set Accuracy) for Logistic Regression %f" % accuracy_score_log_model)
 print("Classification Report for Logistic Regression: ")  
 print(classification_report_log_model)
 
+Log_model_scores_df = pd.DataFrame(classification_report_log_model).transpose()
+Log_model_scores_df.loc["Cross Validation Score"] = [cross_val_score_log_model, None, None, None]
+Log_model_scores_df.loc["Accuracy Score"] = [accuracy_score_log_model, None, None, None]
+Log_model_scores_df.reset_index(inplace=True)
+Log_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
+
+Log_model_scores_df.to_csv("Generated_files/Log_model_scores_df.csv") # Save df_analyzed
 
 #### Testing the model
 #examples
 # sentence_to_df function
 def sentence_to_df(sentence, vectorizer_method):
-    print("===========================================================")
-    print("---Normal Sentence---")
+    #---Normal Sentence---
     print(sentence)
-    
-    # Create DF
+    # Create Df
     df_sentence = pd.DataFrame([sentence], columns=['sentence'])
-    print("---df sentence---")      
-    print(df_sentence)
-    
     # Clean sentence
     df_sentence['sentence'] = textCleaner(df_sentence['sentence'], rare_words=False)
-    print("---Cleaned Sentence---")
-    print(df_sentence['sentence'].iloc[0])
+    #---Cleaned Sentence---
+    print("\nCleaned: \n",df_sentence['sentence'].iloc[0])
     # tf-idf
     new_sentence_tf_idf = vectorizer_method.transform(df_sentence['sentence'])
-    print(new_sentence_tf_idf)
+    #print(new_sentence_tf_idf) #remove '#' if you want to see the values of the attributes
     return new_sentence_tf_idf
 
-# Test sentence
-sentence1 = "The curtains look great and set a dramatic tone to the room. They are thin enough to allow in sunlight so the room isnt completely dark. curtain look great set dramatic room thin enough allow sunlight room completely dark"
-a = sentence_to_df(sentence1, tf_idf_word_vectorizer)
+## Test sentence
+#sentence1 = "The curtains look great and set a dramatic tone to the room. They are thin enough to allow in sunlight so the room isnt completely dark. curtain look great set dramatic room thin enough allow sunlight room completely dark"
+#a = sentence_to_df(sentence1, tf_idf_word_vectorizer)
+#
+#
+#sentence1 = "The movie was great."
+#sentence2 = "This is the worst holiday trip I have ever been."
+#sentence3 = "I really liked this product's features."
+#
+#sentences = [sentence1, sentence2, sentence3]
+#
+#for sentence in sentences:
+#      sentence_to_df(sentence, tf_idf_word_vectorizer)
 
-
-sentence1 = "The movie was great."
-sentence2 = "This is the worst holiday trip I have ever been."
-sentence3 = "I really liked this product's features."
-
-sentences = [sentence1, sentence2, sentence3]
-
-for sentence in sentences:
-      sentence_to_df(sentence, tf_idf_word_vectorizer)
+# Test on Random Sentences
+randomSentencesFromDataset_df = amazon_kozmos_data["Review"]
+def findRandomSentencesFromDataset(df):
+    index = np.random.randint(0, (df.size))
+    return df[index]
+randomSentence = findRandomSentencesFromDataset(randomSentencesFromDataset_df)
+randomSentence_tf_idf =sentence_to_df(randomSentence, tf_idf_word_vectorizer)
+prediction = log_final.predict(randomSentence_tf_idf)
+print("Random Sentence:", randomSentence)
+print("Predicted Label:", prediction)
