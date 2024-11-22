@@ -192,7 +192,7 @@ Log_model_scores_df.loc["Accuracy Score"] = [accuracy_score_log_model, None, Non
 Log_model_scores_df.reset_index(inplace=True)
 Log_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
 
-Log_model_scores_df.to_csv("Generated_files/Log_model_scores_df.csv") # Save df_analyzed
+#Log_model_scores_df.to_csv("Generated_files/Log_model_scores_df.csv") # Save df_analyzed
 
 #### Testing the model
 #examples
@@ -235,3 +235,15 @@ randomSentence_tf_idf =sentence_to_df(randomSentence, tf_idf_word_vectorizer)
 prediction = log_final.predict(randomSentence_tf_idf)
 print("Random Sentence:", randomSentence)
 print("Predicted Label:", prediction)
+
+#### Random Forests
+rf_model = RandomForestClassifier(random_state=20)
+
+rf_params = {'n_estimators'     : [100, 200, 500, 750, 1000, 2000],
+             'max_depth'        : [None, 10, 25, 50],
+             'min_samples_split': [10,30,50,75,100],
+             'min_samples_leaf' : [5,25,50],
+             'max_features'     : ['sqrt', 'log2', 'auto', 100, 250, 500, 1000, 2500],
+             'bootstrap'        : True,
+             'criterion'        : ['squared_error']
+             }
