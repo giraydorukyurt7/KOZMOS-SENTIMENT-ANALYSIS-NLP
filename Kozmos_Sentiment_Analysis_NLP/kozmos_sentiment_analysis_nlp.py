@@ -244,6 +244,11 @@ rf_params = {'n_estimators'     : [100, 200, 500, 750, 1000, 2000],
              'min_samples_split': [10,30,50,75,100],
              'min_samples_leaf' : [5,25,50],
              'max_features'     : ['sqrt', 'log2', 'auto', 100, 250, 500, 1000, 2500],
-             'bootstrap'        : True,
-             'criterion'        : ['squared_error']
+             'bootstrap'        : [True],
+             'criterion'        : ['gini'] # gini works better for big datasets, entropy works better for small datasets.
              }
+rf_tuned = GridSearchCV(rf_model,
+                        rf_params,
+                        cv=10,
+                        n_jobs=-1,
+                        verbose=3).fit(X_train, Y_train)
