@@ -122,43 +122,43 @@ print("size of X_train  : "   + str(X_train.size),
 
 log_model = LogisticRegression(random_state=20)
 
-log_params_l1 = {"penalty": ["l1"],
-                 "solver": ["liblinear", "saga"],  # solvers for L1
-                 "max_iter": [200, 500, 1000, 2000]
-}
-log_params_l2 = {"penalty": ["l2"],
-                 "solver": ["liblinear", "lbfgs", "newton-cg","newton-cholesky", "sag", "saga"],  # solvers for L2
-                 "max_iter": [200, 500, 1000, 2000]
-}
-log_params_elasticnet = {"penalty": ["elasticnet"],
-                         "solver": ["saga"],             # Solver for ElasticNet
-                         "l1_ratio": [0.25, 0.5, 0.75],  # effects of l1 and l2
-                         "max_iter": [200, 500, 1000, 2000]
-}
-
-
-log_best_grid_l1 = GridSearchCV(log_model,
-                                log_params_l1,
-                                cv=10,
-                                n_jobs=-1,
-                                verbose=True).fit(X_tf_idf_word, y)
-log_best_grid_l2 = GridSearchCV(log_model,
-                                log_params_l2,
-                                cv=10,
-                                n_jobs=-1,
-                                verbose=True).fit(X_tf_idf_word, y)
-log_best_grid_elasticnet = GridSearchCV(log_model,
-                                        log_params_elasticnet,
-                                        cv=10,
-                                        n_jobs=-1,
-                                        verbose=True).fit(X_tf_idf_word, y)
-
-print("l1 score        : %f" % log_best_grid_l1.best_score_)
-print(log_best_grid_l1.best_params_)
-print("l2 score        : %f" % log_best_grid_l2.best_score_)
-print(log_best_grid_l2.best_params_)
-print("ElasticNet score: %f" % log_best_grid_elasticnet.best_score_)
-print(log_best_grid_elasticnet.best_params_)
+#log_params_l1 = {"penalty": ["l1"],
+#                 "solver": ["liblinear", "saga"],  # solvers for L1
+#                 "max_iter": [200, 500, 1000, 2000]
+#}
+#log_params_l2 = {"penalty": ["l2"],
+#                 "solver": ["liblinear", "lbfgs", "newton-cg","newton-cholesky", "sag", "saga"],  # solvers for L2
+#                 "max_iter": [200, 500, 1000, 2000]
+#}
+#log_params_elasticnet = {"penalty": ["elasticnet"],
+#                         "solver": ["saga"],             # Solver for ElasticNet
+#                         "l1_ratio": [0.25, 0.5, 0.75],  # effects of l1 and l2
+#                         "max_iter": [200, 500, 1000, 2000]
+#}
+#
+#
+#log_best_grid_l1 = GridSearchCV(log_model,
+#                                log_params_l1,
+#                                cv=10,
+#                                n_jobs=-1,
+#                                verbose=True).fit(X_tf_idf_word, y)
+#log_best_grid_l2 = GridSearchCV(log_model,
+#                                log_params_l2,
+#                                cv=10,
+#                                n_jobs=-1,
+#                                verbose=True).fit(X_tf_idf_word, y)
+#log_best_grid_elasticnet = GridSearchCV(log_model,
+#                                        log_params_elasticnet,
+#                                        cv=10,
+#                                        n_jobs=-1,
+#                                        verbose=True).fit(X_tf_idf_word, y)
+#
+#print("l1 score        : %f" % log_best_grid_l1.best_score_)
+#print(log_best_grid_l1.best_params_)
+#print("l2 score        : %f" % log_best_grid_l2.best_score_)
+#print(log_best_grid_l2.best_params_)
+#print("ElasticNet score: %f" % log_best_grid_elasticnet.best_score_)
+#print(log_best_grid_elasticnet.best_params_)
 
 ###########################Obtained Data###########################
 ####l1 score        : 0.953695
@@ -167,8 +167,12 @@ print(log_best_grid_elasticnet.best_params_)
 ####{'max_iter': 200, 'penalty': 'l2', 'solver': 'saga'}
 ####ElasticNet score: 0.938495
 ####{'l1_ratio': 0.75, 'max_iter': 200, 'penalty': 'elasticnet', 'solver': 'saga'}
-
-log_final = log_model.set_params(**log_best_grid_l1.best_params_,
+# 
+# !!! Model has been tuned according to these hyper parameters.
+#
+log_final = log_model.set_params(max_iter= 200, 
+                                 penalty = 'l1', 
+                                 solver  = 'saga',
                                  random_state=20).fit(X_train,Y_train)
 
 # Error and Accuracy Metrics
@@ -192,24 +196,25 @@ Log_model_scores_df.loc["Accuracy Score"] = [accuracy_score_log_model, None, Non
 Log_model_scores_df.reset_index(inplace=True)
 Log_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
 
-#Log_model_scores_df.to_csv("Generated_files/Log_model_scores_df.csv") # Save df_analyzed
+#Log_model_scores_df.to_csv("Generated_files/Log_model_scores_df.csv") # Save analyzed Log_model_scores_df.csv
 
 #### Testing the model
 #examples
 # sentence_to_df function
 def sentence_to_df(sentence, vectorizer_method):
     #---Normal Sentence---
-    print(sentence)
+    #print(sentence)
     # Create Df
     df_sentence = pd.DataFrame([sentence], columns=['sentence'])
     # Clean sentence
     df_sentence['sentence'] = textCleaner(df_sentence['sentence'], rare_words=False)
     #---Cleaned Sentence---
-    print("\nCleaned: \n",df_sentence['sentence'].iloc[0])
+    cleaned_sentence = df_sentence['sentence'].iloc[0]
+    #print("\nCleaned:\n", cleaned_sentence)
     # tf-idf
     new_sentence_tf_idf = vectorizer_method.transform(df_sentence['sentence'])
     #print(new_sentence_tf_idf) #remove '#' if you want to see the values of the attributes
-    return new_sentence_tf_idf
+    return new_sentence_tf_idf, cleaned_sentence
 
 ## Test sentence
 #sentence1 = "The curtains look great and set a dramatic tone to the room. They are thin enough to allow in sunlight so the room isnt completely dark. curtain look great set dramatic room thin enough allow sunlight room completely dark"
@@ -231,24 +236,73 @@ def findRandomSentencesFromDataset(df):
     index = np.random.randint(0, (df.size))
     return df[index]
 randomSentence = findRandomSentencesFromDataset(randomSentencesFromDataset_df)
-randomSentence_tf_idf =sentence_to_df(randomSentence, tf_idf_word_vectorizer)
+randomSentence_tf_idf, cleaned_sentence =sentence_to_df(randomSentence, tf_idf_word_vectorizer)
 prediction = log_final.predict(randomSentence_tf_idf)
-print("Random Sentence:", randomSentence)
-print("Predicted Label:", prediction)
+print("\nRandom Sentence:\n", randomSentence)
+print("\nCleaned:\n", cleaned_sentence)
+print("\nPredicted Label:\n", prediction)
 
 #### Random Forests
 rf_model = RandomForestClassifier(random_state=20)
+#
+#
+#
+#rf_params = {'n_estimators'     : [200, 500, 750, 1000],
+#             'max_depth'        : [10, 25, 50],
+#             'min_samples_split': [30,50,75,100],
+#             'min_samples_leaf' : [5,25,50],
+#             'max_features'     : [100, 250, 500, 1000],
+#             'bootstrap'        : [True],
+#             'criterion'        : ['gini'] # gini works better for big datasets, entropy works better for small datasets.
+#             }
+#
+#rf_tuned = GridSearchCV(rf_model,
+#                        rf_params,
+#                        cv=10,
+#                        n_jobs=-1,
+#                        verbose=3).fit(X_train, Y_train)
+#
+#  !!! Model has been tuned according to these hyper parameters. The training duration took 51 minutes.
+#
+rf_final = rf_model.set_params(bootstrap = True,
+                               criterion = 'gini',
+                               max_depth= 50,
+                               max_features= 1000,
+                               min_samples_leaf= 5,
+                               min_samples_split= 30,
+                               n_estimators = 750,
+                               random_state=20).fit(X_train,Y_train)
 
-rf_params = {'n_estimators'     : [100, 200, 500, 750, 1000, 2000],
-             'max_depth'        : [None, 10, 25, 50],
-             'min_samples_split': [10,30,50,75,100],
-             'min_samples_leaf' : [5,25,50],
-             'max_features'     : ['sqrt', 'log2', 'auto', 100, 250, 500, 1000, 2500],
-             'bootstrap'        : [True],
-             'criterion'        : ['gini'] # gini works better for big datasets, entropy works better for small datasets.
-             }
-rf_tuned = GridSearchCV(rf_model,
-                        rf_params,
-                        cv=10,
-                        n_jobs=-1,
-                        verbose=3).fit(X_train, Y_train)
+cross_val_score_rf_model = cross_val_score(rf_final,
+                                           X_test,
+                                           Y_test,
+                                           cv=10,
+                                           n_jobs=-1).mean()
+
+y_pred = rf_final.predict(X_test)
+accuracy_score_rf_model = accuracy_score(Y_test, y_pred)
+classification_report_rf_model = classification_report(Y_test, y_pred, output_dict=True)
+print("Cross validation score (Mean Cross-Validation Accuracy) for Random Forests %f" % cross_val_score_rf_model)
+print("Accuracy score (Test Set Accuracy) for Random Forests %f" % accuracy_score_rf_model)
+print("Classification Report for Random Forests: ")  
+print(classification_report_rf_model)
+
+rf_model_scores_df = pd.DataFrame(classification_report_rf_model).transpose()
+rf_model_scores_df.loc["Cross Validation Score"] = [cross_val_score_rf_model, None, None, None]
+rf_model_scores_df.loc["Accuracy Score"] = [accuracy_score_rf_model, None, None, None]
+rf_model_scores_df.reset_index(inplace=True)
+rf_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
+
+#rf_model_scores_df.to_csv("Generated_files/rf_model_scores_df.csv") # Save analyzed rf_model_scores_df.csv
+
+
+randomSentencesFromDataset_df = amazon_kozmos_data["Review"]
+def findRandomSentencesFromDataset(df):
+    index = np.random.randint(0, (df.size))
+    return df[index]
+randomSentence = findRandomSentencesFromDataset(randomSentencesFromDataset_df)
+randomSentence_tf_idf, cleaned_sentence =sentence_to_df(randomSentence, tf_idf_word_vectorizer)
+prediction = rf_final.predict(randomSentence_tf_idf)
+print("\nRandom Sentence:\n", randomSentence)
+print("\nCleaned:\n", cleaned_sentence)
+print("\nPredicted Label:\n", prediction)
