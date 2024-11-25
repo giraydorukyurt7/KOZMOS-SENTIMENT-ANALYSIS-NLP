@@ -1,17 +1,25 @@
-const csv = require('csv-parser')
-const fs = require('fs')
-const results = [];
+const csv = require('csv-parser'); // Include the csv-parser module
+const fs = require('fs'); // Include the file system module
+const path = require('path'); // Include the path module
 
-fs.createReadStream('../Generated_files/Log_model_scores_df.csv')
+// Use __dirname to get the absolute path of the current directory
+const filePath = path.join(__dirname, '../../Generated_files/Log_model_scores_df.csv');
+
+console.log('Trying to read from:', filePath); // Log the file path for debugging
+
+const results = []; // Array to store the parsed data
+
+fs.createReadStream(filePath)
   .pipe(csv())
-  .on('data', (data) => results.push(data))
+  .on('data', (data) => results.push(data)) // Add each row of data to the results array
   .on('end', () => {
-    console.log(results);
-    for(let i = 0; i < results.length; i++){
-        let Metric = results[i].Metric;
-        let precision = results[i].precision;
-        let recall = results[i].recall;
-        let f1_score = results[i].f1_score;
-        let support = results[i].support;
+    console.log(results); // Log the entire dataset to the console
+    for(let i=0;i<results.length;i++){
+      let metric = results[i].metrics
     }
+  })
+  .on('error', (err) => {
+    console.error('Error reading the file:', err.message);
   });
+
+  console.log(metric);

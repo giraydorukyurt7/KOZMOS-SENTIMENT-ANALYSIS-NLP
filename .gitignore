@@ -1,3 +1,7 @@
 Kozmos_Sentiment_Analysis_NLP/test.ipynb
 Kozmos_Sentiment_Analysis_NLP/test2.ipynb
 Kozmos_Sentiment_Analysis_NLP/test3.ipynb
+
+node_modules
+package-lock.json
+package.json
