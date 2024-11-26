@@ -1,25 +1,47 @@
-const csv = require('csv-parser'); // Include the csv-parser module
-const fs = require('fs'); // Include the file system module
-const path = require('path'); // Include the path module
-
-// Use __dirname to get the absolute path of the current directory
-const filePath = path.join(__dirname, '../../Generated_files/Log_model_scores_df.csv');
-
-console.log('Trying to read from:', filePath); // Log the file path for debugging
-
-const results = []; // Array to store the parsed data
-
-fs.createReadStream(filePath)
-  .pipe(csv())
-  .on('data', (data) => results.push(data)) // Add each row of data to the results array
-  .on('end', () => {
-    console.log(results); // Log the entire dataset to the console
-    for(let i=0;i<results.length;i++){
-      let metric = results[i].metrics
-    }
-  })
-  .on('error', (err) => {
-    console.error('Error reading the file:', err.message);
-  });
-
-  console.log(metric);
+// READ CSV WITH FETCH
+function loadCSV(filePath, title) {
+    fetch(filePath)
+      .then(response => response.text())
+      .then(data => {
+        const lines = data.split('\n'); // Split csv lines
+        let tableHTML = `<h3>${title}</h3><table border="1"><tr><th>#</th><th>Metric</th><th>Precision</th><th>Recall</th><th>F1-Score</th><th>Support</th></tr>`; // titles
+  
+        // Create Table
+        for (let i = 1; i < lines.length; i++) {
+          const line = lines[i].trim(); // Clean titles and spaces
+          if (line) {  // If line is not empty
+            const columns = line.split(','); // Split the line according to ','
+            
+            //Change empty cells with 'NaN'
+            for (let j=1;j<columns.length;j++){
+              if(columns[j].trim()===''){
+                columns[j] ='NaN';
+              }
+            }
+            
+            // Add new table line for every line
+            tableHTML += `<tr>
+                            <td>${columns[0]}</td>
+                            <td>${columns[1]}</td>
+                            <td>${columns[2]}</td>
+                            <td>${columns[3]}</td>
+                            <td>${columns[4]}</td>
+                            <td>${columns[5]}</td>
+                          </tr>`;
+          }
+        }
+  
+        tableHTML += '</table>'; // close table
+  
+        // print table
+        document.getElementById('output').innerHTML += tableHTML; // to not delete first table when adding second one.
+      })
+      .catch(error => console.error('Error reading the CSV file:', error));
+  }
+  
+  // 1st csv file
+  loadCSV('../../Generated_files/Log_model_scores_df.csv', 'Logistic Regression Model Scores');
+  
+  // 2nd csv file
+  loadCSV('../../Generated_files/rf_model_scores_df.csv', 'Random Forests Model Scores');
+  
