@@ -100,6 +100,13 @@ df_analyzed = pd.concat([df["sentiment_label"].value_counts(),
 print(df_analyzed)
 #df_analyzed.to_xml("Generated_files/df_analyzed.xml") # Save df_analyzed.xml
 
+dfToXml(df            = df_analyzed,
+        filename      = "df_analyzed.xml",
+        filedirectory = "Frontend/DatasetAnalyzedPage",
+        xsl_href      = "datasetanalyzedpage.xsl",
+        index_        = True,
+        encode        = "utf-8")
+
 # turn pos/neg to 1-0 for machine learning
 df["sentiment_label"] = LabelEncoder().fit_transform(df["sentiment_label"])
 # create dependent variable & independent variable
@@ -197,25 +204,13 @@ Log_model_scores_df.loc["Accuracy Score"] = [accuracy_score_log_model, None, Non
 Log_model_scores_df.reset_index(inplace=True)
 Log_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
 
-
-#def dfToXml(df,filename, filedirectory,xsl_href,index_=False, encode="utf-8"):
-#    fullfilename = filedirectory+"/"+filename
-#    df.to_xml(fullfilename,index=index_,root_name="data") #save df as xml
-#    #add xsl referance
-#    with open(fullfilename,"r",encoding=encode) as file:
-#        xml_content = file.read()
-#    xslt_reference = '<?xml-stylesheet type="text/xsl" href="%s"?>\n' % xsl_href
-#    xml_with_xslt  = xml_content.replace("<?xml version='1.0' encoding='utf-8'?>",
-#                                         "<?xml version='1.0' encoding='utf-8'?>\n" + xslt_reference)
-#    with open(fullfilename,"w",encoding=encode) as file:
-#        file.write(xml_with_xslt)
-
-dfToXml(df            = Log_model_scores_df,
-        filename      = "Log_model_scores_df.xml",
-        filedirectory = "Frontend/FeaturesOfModelsPage",
-        xsl_href      = "featuresofmodelspage.xsl",
-        index_        = False,
-        encode        = "utf-8")
+# Save analyzed Log_model_scores_df.xml
+#dfToXml(df            = Log_model_scores_df,
+#        filename      = "Log_model_scores_df.xml",
+#        filedirectory = "Frontend/FeaturesOfModelsPage",
+#        xsl_href      = "featuresofmodelspage.xsl",
+#        index_        = False,
+#        encode        = "utf-8")
 
 #log_model_file_name = "Generated_files/Log_model_scores_df.xml"
 #Log_model_scores_df.to_xml(log_model_file_name,
@@ -323,14 +318,13 @@ rf_model_scores_df.loc["Accuracy Score"] = [accuracy_score_rf_model, None, None,
 rf_model_scores_df.reset_index(inplace=True)
 rf_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
 
-#rf_model_scores_df.to_xml("Generated_files/rf_model_scores_df.xml", index=False) # Save analyzed rf_model_scores_df.xml
-
-dfToXml(df            = rf_model_scores_df,
-        filename      = "Rf_model_scores_df.xml",
-        filedirectory = "Frontend/FeaturesOfModelsPage",
-        xsl_href      = "featuresofmodelspage.xsl",
-        index_        = False,
-        encode        = "utf-8")
+# Save analyzed Rf_model_scores_df.xml
+#dfToXml(df            = rf_model_scores_df,
+#        filename      = "Rf_model_scores_df.xml",
+#        filedirectory = "Frontend/FeaturesOfModelsPage",
+#        xsl_href      = "featuresofmodelspage.xsl",
+#        index_        = False,
+#        encode        = "utf-8")
 
 
 randomSentencesFromDataset_df = amazon_kozmos_data["Review"]

@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type="text/xsl" href="datasetanalyzedpage.xsl"?>
+
+<data>
+  <row>
+    <sentiment_label>pos</sentiment_label>
+    <count>4826</count>
+    <Star>4.562992125984252</Star>
+    <HelpFul>5001</HelpFul>
+  </row>
+  <row>
+    <sentiment_label>neg</sentiment_label>
+    <count>767</count>
+    <Star>3.4302477183833116</Star>
+    <HelpFul>481</HelpFul>
+  </row>
+</data>
