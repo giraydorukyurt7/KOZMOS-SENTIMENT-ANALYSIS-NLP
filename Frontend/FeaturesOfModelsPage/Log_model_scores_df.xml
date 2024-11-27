@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='utf-8'?>
+<?xml-stylesheet type="text/xsl" href="featuresofmodelspage.xsl"?>
+
+<data>
+  <row>
+    <Metric>0</Metric>
+    <precision>0.8217391304347826</precision>
+    <recall>0.7941176470588235</recall>
+    <f1-score>0.8076923076923077</f1-score>
+    <support>238.0</support>
+  </row>
+  <row>
+    <Metric>1</Metric>
+    <precision>0.9661602209944752</precision>
+    <recall>0.9715277777777778</recall>
+    <f1-score>0.9688365650969529</f1-score>
+    <support>1440.0</support>
+  </row>
+  <row>
+    <Metric>accuracy</Metric>
+    <precision>0.9463647199046484</precision>
+    <recall>0.9463647199046484</recall>
+    <f1-score>0.9463647199046484</f1-score>
+    <support>0.9463647199046484</support>
+  </row>
+  <row>
+    <Metric>macro avg</Metric>
+    <precision>0.8939496757146289</precision>
+    <recall>0.8828227124183006</recall>
+    <f1-score>0.8882644363946304</f1-score>
+    <support>1678.0</support>
+  </row>
+  <row>
+    <Metric>weighted avg</Metric>
+    <precision>0.9456761807363068</precision>
+    <recall>0.9463647199046484</recall>
+    <f1-score>0.9459805857987972</f1-score>
+    <support>1678.0</support>
+  </row>
+  <row>
+    <Metric>Cross Validation Score</Metric>
+    <precision>0.8831907613344738</precision>
+    <recall/>
+    <f1-score/>
+    <support/>
+  </row>
+  <row>
+    <Metric>Accuracy Score</Metric>
+    <precision>0.9463647199046484</precision>
+    <recall/>
+    <f1-score/>
+    <support/>
+  </row>
+</data>
