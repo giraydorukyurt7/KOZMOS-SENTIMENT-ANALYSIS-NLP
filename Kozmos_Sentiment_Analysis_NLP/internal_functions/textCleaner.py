@@ -7,7 +7,6 @@ from textblob    import Word
 #IMPORTANT: Download these packages before use
 #nltk.download('stopwords')     # --> Text Preprocessing
 #nltk.download('wordnet')       # --> Text Preprocessing
-#nltk.download('vader_lexicon') # --> Sentiment Analysis
 
 # Note: if you want to use this code the dataframe shouldn't have null values.
 # Example for handling null values:
