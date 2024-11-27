@@ -98,14 +98,14 @@ df_analyzed = pd.concat([df["sentiment_label"].value_counts(),
                          df.groupby("sentiment_label")["HelpFul"].sum()],
                         axis=1)
 print(df_analyzed)
-#df_analyzed.to_xml("Generated_files/df_analyzed.xml") # Save df_analyzed.xml
 
-dfToXml(df            = df_analyzed,
-        filename      = "df_analyzed.xml",
-        filedirectory = "Frontend/DatasetAnalyzedPage",
-        xsl_href      = "datasetanalyzedpage.xsl",
-        index_        = True,
-        encode        = "utf-8")
+# Save df_analyzed.xml
+#dfToXml(df            = df_analyzed,
+#        filename      = "df_analyzed.xml",
+#        filedirectory = "Frontend/DatasetAnalyzedPage",
+#        xsl_href      = "datasetanalyzedpage.xsl",
+#        index_        = True,
+#        encode        = "utf-8")
 
 # turn pos/neg to 1-0 for machine learning
 df["sentiment_label"] = LabelEncoder().fit_transform(df["sentiment_label"])

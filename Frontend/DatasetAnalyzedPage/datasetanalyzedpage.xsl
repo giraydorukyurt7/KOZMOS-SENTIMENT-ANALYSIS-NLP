@@ -17,10 +17,10 @@
                 <!-- Analysis of Dataset -->
                 <Table border="1">
                     <tr bgcolor="#aaaaaa">
-                        <th>sentiment_label</th>
-                        <th>count</th>
-                        <th>Star</th>
-                        <th>HelpFul</th>
+                        <th>Comment Sentiment type</th>
+                        <th>Quantities of negative/positive comments</th>
+                        <th>Overall rating for comment polarity</th>
+                        <th>Number of Helpfulness Votes</th>
                     </tr>
                     <xsl:for-each select="document('df_analyzed.xml')/data/row">
                         <tr>
