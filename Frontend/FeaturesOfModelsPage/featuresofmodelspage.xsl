@@ -13,7 +13,12 @@
             </head>
                 <body>
                 <h1>Stats Of Models Used In Sentiment Analysis</h1>
-
+                <h3>Pages:</h3>
+                <ul>
+                    <li><button onclick="window.location.href='../MainPage/mainpage.html'">Main Page</button></li>
+                    <li><button onclick="window.location.href='../DatasetAnalyzedPage/df_analyzed.xml'">DataFrame Analyzed</button></li>
+                    <li><button onclick="window.location.href='../FeaturesOfModelsPage/Log_model_scores_df.xml'">Features Of Models</button></li>
+                </ul>
                 <!-- Logistic Regression Model -->
                 <h2>Logistic Regression Model</h2>
                 <Table border="1">
