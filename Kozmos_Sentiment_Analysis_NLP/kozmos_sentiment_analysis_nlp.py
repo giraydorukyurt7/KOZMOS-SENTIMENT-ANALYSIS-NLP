@@ -17,6 +17,7 @@ from sklearn.model_selection            import train_test_split, GridSearchCV, c
 from sklearn.linear_model               import LogisticRegression
 from sklearn.ensemble                   import RandomForestClassifier
 from sklearn.metrics                    import accuracy_score, classification_report
+import pickle
 
 filterwarnings("ignore")
 
@@ -55,7 +56,7 @@ ax = tf[tf["tf"]>200].plot.bar(x="Words", y="tf")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=45, ha='right', fontsize=10)
 
 plt.tight_layout()
-#plt.savefig("Generated_photos/term_frequency.png") #save the bar plot
+#plt.savefig("Generated_files/term_frequency.png") #save the bar plot
 plt.show()
 # Word Cloud
 text = " ".join(i for i in df.Review) # transform Review column into single string
@@ -71,7 +72,7 @@ wordcloud = WordCloud(background_color= "lightgray",
 plt.figure(figsize=(20, 10))
 plt.imshow(wordcloud, interpolation="bilinear")
 plt.axis("off")
-#plt.savefig("Generated_photos/wordcloud__.png", dpi=600, bbox_inches='tight') #save wordcloud
+#plt.savefig("Generated_files/wordcloud__.png", dpi=600, bbox_inches='tight') #save wordcloud
 plt.show()
 
 
@@ -182,6 +183,11 @@ log_final = log_model.set_params(max_iter= 200,
                                  penalty = 'l1', 
                                  solver  = 'saga',
                                  random_state=20).fit(X_train,Y_train)
+
+# Save model
+with open('Generated_files/log_final.pkl', 'wb') as f:
+    pickle.dump(log_final, f)
+
 
 # Error and Accuracy Metrics
 
@@ -297,6 +303,10 @@ rf_final = rf_model.set_params(bootstrap = True,
                                min_samples_split= 30,
                                n_estimators = 750,
                                random_state=20).fit(X_train,Y_train)
+
+# Save model
+with open('Generated_files/rf_model.pkl', 'wb') as f:
+    pickle.dump(rf_final, f)
 
 cross_val_score_rf_model = cross_val_score(rf_final,
                                            X_test,
