@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import nltk
 from internal_functions.textCleaner     import textCleaner
 from internal_functions.dfToXml         import dfToXml
+from internal_functions.sentence_to_df  import sentence_to_df
 from warnings                           import filterwarnings
 from wordcloud                          import WordCloud
 from PIL                                import Image
@@ -185,8 +186,8 @@ log_final = log_model.set_params(max_iter= 200,
                                  random_state=20).fit(X_train,Y_train)
 
 # Save model
-with open('Generated_files/log_final.pkl', 'wb') as f:
-    pickle.dump(log_final, f)
+#with open('Generated_files/log_final.pkl', 'wb') as f:
+#    pickle.dump(log_final, f)
 
 
 # Error and Accuracy Metrics
@@ -231,21 +232,22 @@ Log_model_scores_df.rename(columns={"index": "Metric"}, inplace=True)
 #    file.write(xml_with_xslt)
 #### Testing the model
 #examples
+
 # sentence_to_df function
-def sentence_to_df(sentence, vectorizer_method):
-    #---Normal Sentence---
-    #print(sentence)
-    # Create Df
-    df_sentence = pd.DataFrame([sentence], columns=['sentence'])
-    # Clean sentence
-    df_sentence['sentence'] = textCleaner(df_sentence['sentence'], rare_words=False)
-    #---Cleaned Sentence---
-    cleaned_sentence = df_sentence['sentence'].iloc[0]
-    #print("\nCleaned:\n", cleaned_sentence)
-    # tf-idf
-    new_sentence_tf_idf = vectorizer_method.transform(df_sentence['sentence'])
-    #print(new_sentence_tf_idf) #remove '#' if you want to see the values of the attributes
-    return new_sentence_tf_idf, cleaned_sentence
+#def sentence_to_df(sentence, vectorizer_method):
+#    #---Normal Sentence---
+#    #print(sentence)
+#    # Create Df
+#    df_sentence = pd.DataFrame([sentence], columns=['sentence'])
+#    # Clean sentence
+#    df_sentence['sentence'] = textCleaner(df_sentence['sentence'], rare_words=False)
+#    #---Cleaned Sentence---
+#    cleaned_sentence = df_sentence['sentence'].iloc[0]
+#    #print("\nCleaned:\n", cleaned_sentence)
+#    # tf-idf
+#    new_sentence_tf_idf = vectorizer_method.transform(df_sentence['sentence'])
+#    #print(new_sentence_tf_idf) #remove '#' if you want to see the values of the attributes
+#    return new_sentence_tf_idf, cleaned_sentence
 
 ## Test sentence
 #sentence1 = "The curtains look great and set a dramatic tone to the room. They are thin enough to allow in sunlight so the room isnt completely dark. curtain look great set dramatic room thin enough allow sunlight room completely dark"
@@ -305,8 +307,8 @@ rf_final = rf_model.set_params(bootstrap = True,
                                random_state=20).fit(X_train,Y_train)
 
 # Save model
-with open('Generated_files/rf_model.pkl', 'wb') as f:
-    pickle.dump(rf_final, f)
+#with open('Generated_files/rf_model.pkl', 'wb') as f:
+#    pickle.dump(rf_final, f)
 
 cross_val_score_rf_model = cross_val_score(rf_final,
                                            X_test,
