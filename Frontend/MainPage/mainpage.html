@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>KOZMOS SENTIMENT ANALYSIS</title>
     </head>
     <body>
@@ -13,6 +15,12 @@
             <li><button onclick="window.location.href='../FeaturesOfModelsPage/Log_model_scores_df.xml'">Features Of Models</button></li>
             <li><button onclick="window.location.href='test.html'">Test Page</button></li>
         </ul>
+
+        <form action="/predict_log" method="post">
+            <label for="user_input">Enter text for Logistic Regression Model:</label>
+            <input type="text" id="user_input" name="user_input" required>
+            <button type="submit">Predict</button>
+        </form>
         <textarea></textarea>
     </body>
 </html>
