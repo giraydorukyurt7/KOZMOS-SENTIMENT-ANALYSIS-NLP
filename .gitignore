@@ -7,5 +7,6 @@ package-lock.json
 package.json
 
 Frontend/MainPage/test.html
+Frontend/MainPage/test.py
 
 .venv
