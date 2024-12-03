@@ -349,3 +349,8 @@ prediction = rf_final.predict(randomSentence_tf_idf)
 print("\nRandom Sentence:\n", randomSentence)
 print("\nCleaned:\n", cleaned_sentence)
 print("\nPredicted Label:\n", prediction)
+
+
+# Save model tfidf_vectorizer.pkl
+#with open('Generated_files/tfidf_vectorizer.pkl', 'wb') as f:
+#    pickle.dump(tf_idf_word_vectorizer, f)
