@@ -19,6 +19,8 @@
                     <li><button onclick="window.location.href='../DatasetAnalyzedPage/df_analyzed.xml'">DataFrame Analyzed</button></li>
                     <li><button onclick="window.location.href='../FeaturesOfModelsPage/Log_model_scores_df.xml'">Features Of Models</button></li>
                 </ul>
+                <h2>Term Frequency Visualization</h2>
+                <img src="../../Generated_files/term_frequency.png" alt="Term Frequency" style="display:block; margin:auto; width:80%;" />
                 <!-- Logistic Regression Model -->
                 <h2>Logistic Regression Model</h2>
                 <Table border="1">
